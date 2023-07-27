@@ -1,5 +1,5 @@
 import app from "./src/app.js";
-const PORT = process.env.port || 3000;
+const PORT = process.env.port || 3001;
 
 // SERVIDOR LEVANTADO
 app.listen(PORT, () => {

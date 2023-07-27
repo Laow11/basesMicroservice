@@ -77,8 +77,23 @@ router.post("/upload_macro", upload.single("file"), async (req, res) => {
     jsonToCsv.forEach((data) => csvStream.write(data));
     csvStream.end();
 
-    const file = path.resolve("ACEASTWAY_MACRO.csv");
-    res.download(file);
+    writableStream.on("finish", () => {
+      const file = path.resolve("ACEASTWAY_MACRO.csv");
+      res.download(file, (err) => {
+        if (err) {
+          console.error("Error al descargar el archivo:", err);
+        } else {
+          // Eliminar el archivo después de que se haya descargado con éxito
+          fs.unlink(file, (err) => {
+            if (err) {
+              console.error("Error al eliminar el archivo:", err);
+            } else {
+              console.log("Archivo eliminado:", file);
+            }
+          });
+        }
+      });
+    });
   } catch (error) {
     res.status(500).send({ error: error.message });
     console.log(error);
