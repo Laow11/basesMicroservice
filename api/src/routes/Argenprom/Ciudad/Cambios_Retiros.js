@@ -2,7 +2,8 @@ import { Router } from "express";
 import multer from "multer";
 import xlsx from "xlsx";
 import fs from "fs";
-import csv from "fast-csv";import path from "path";
+import csv from "fast-csv";
+import path from "path";
 
 const upload = multer({ dest: "uploads/" });
 const router = Router();
@@ -64,8 +65,23 @@ router.post("/upload_ciudad-cr", upload.single("file"), async (req, res) => {
     csvStream.end();
     console.log(jsonToCsv);
 
-    const file = path.resolve("ARGENPROM_CIUDAD_CR.csv");
-    res.download(file);
+    writableStream.on("finish", () => {
+      const file = path.resolve("ARGENPROM_CIUDAD_CR.csv");
+      res.download(file, (err) => {
+        if (err) {
+          console.error("Error al descargar el archivo:", err);
+        } else {
+          // Eliminar el archivo después de que se haya descargado con éxito
+          fs.unlink(file, (err) => {
+            if (err) {
+              console.error("Error al eliminar el archivo:", err);
+            } else {
+              console.log("Archivo eliminado:", file);
+            }
+          });
+        }
+      });
+    });
   } catch (error) {
     res.status(500).send({ error: error.message });
   }

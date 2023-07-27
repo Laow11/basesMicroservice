@@ -76,14 +76,23 @@ router.post("/upload_bapro-canje", upload.single("file"), async (req, res) => {
     jsonToCsv.forEach((data) => csvStream.write(data));
     csvStream.end();
 
-    const file = path.resolve("ACEASTWAYBAPRO_CANJES.csv");
-    res.setHeader("Content-Type", "text/csv; charset=utf-8");
-    res.setHeader(
-      "Content-Disposition",
-      "attachment; filename=ACEASTWAYBAPRO_CANJES.csv"
-    );
-
-    res.sendFile(file, { encoding: "utf-8" });
+    writableStream.on("finish", () => {
+      const file = path.resolve("ACEASTWAYBAPRO_CANJES.csv");
+      res.download(file, (err) => {
+        if (err) {
+          console.error("Error al descargar el archivo:", err);
+        } else {
+          // Eliminar el archivo después de que se haya descargado con éxito
+          fs.unlink(file, (err) => {
+            if (err) {
+              console.error("Error al eliminar el archivo:", err);
+            } else {
+              console.log("Archivo eliminado:", file);
+            }
+          });
+        }
+      });
+    });
   } catch (error) {
     res.status(500).send({ error: error.message });
     console.log(error);

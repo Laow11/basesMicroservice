@@ -60,8 +60,23 @@ router.post("/upload_itau-cr", upload.single("file"), async (req, res) => {
     jsonToCsv.forEach((data) => csvStream.write(data));
     csvStream.end();
 
-    const file = path.resolve("ITAU_CR.csv");
-    res.download(file);
+    writableStream.on("finish", () => {
+      const file = path.resolve("ITAU_CR.csv");
+      res.download(file, (err) => {
+        if (err) {
+          console.error("Error al descargar el archivo:", err);
+        } else {
+          // Eliminar el archivo después de que se haya descargado con éxito
+          fs.unlink(file, (err) => {
+            if (err) {
+              console.error("Error al eliminar el archivo:", err);
+            } else {
+              console.log("Archivo eliminado:", file);
+            }
+          });
+        }
+      });
+    });
   } catch (error) {
     res.status(500).send({ error: error.message });
   }
