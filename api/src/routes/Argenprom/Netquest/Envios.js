@@ -50,7 +50,7 @@ router.post("/upload_netquest_arg", upload.single("file"), async (req, res) => {
         "comprador.cp": datos.CP,
         "comprador.celular": datos.TELEFONO,
         "comprador.email": datos.EMAIL,
-        "comprador.other_info": NULL,
+        "comprador.other_info": datos.OBSERVACION,
         "comprador.horario": null,
         "comprador.obs1": null,
         "comprador.obs2": datos.SKU,
