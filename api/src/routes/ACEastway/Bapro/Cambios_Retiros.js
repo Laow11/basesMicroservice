@@ -18,8 +18,14 @@ router.post("/upload_bapro-cr", upload.single("file"), async (req, res) => {
     // Conversion a formato json
     const jsonData = xlsx.utils.sheet_to_json(readBook.Sheets[sheetName]);
 
+    function obtenerSoloNumeros(cadena) {
+      return cadena.replace(/\D/g, "");
+    }
+
     const jsonToCsv = jsonData.map((datos) => {
       // ENT = ENTREGA, F = REENVÍO, R = RETIRO, C = CAMBIO.
+
+      const cpNumeros = obtenerSoloNumeros(datos.CP);
 
       return {
         tipo_operacion: datos.GESTION.includes("REENVIO")
@@ -30,8 +36,12 @@ router.post("/upload_bapro-cr", upload.single("file"), async (req, res) => {
         servicio_id: "8",
         codigo_sucursal: "SP836",
         "comprador.localidad": datos.LOCALIDAD,
+        "datosEnvios.valor_declarado": null,
         "datosEnvios.confirmada": "1",
+        trabajo: null,
+        lote: null,
         remito: datos.REMITO,
+        "sender.empresa": null,
         "sender.remitente": "AC EASTWAY SA (BAPRO)",
         "sender.calle": "GRAL MANSILLA",
         "sender.altura": "3603",
@@ -43,11 +53,26 @@ router.post("/upload_bapro-cr", upload.single("file"), async (req, res) => {
         "comprador.piso": datos.PISO,
         "comprador.dpto": datos.DPTO,
         "comprador.provincia": datos.PROVINCIA,
-        "comprador.cp": datos.CP,
-        "comprador.other_info": datos.OBSERVACION,
+        "comprador.cp": cpNumeros,
         "comprador.email": datos.EMAIL,
+        "comprador.other_info": datos.OBSERVACION,
+        "comprador.horario": null,
+        "comprador.obs1": null,
         "comprador.obs2": datos.SKU,
         "datosEnvios.bultos": datos.CANTIDAD,
+        "datosEnvios.peso": null,
+        "datosEnvios.alto": null,
+        "datosEnvios.ancho": null,
+        "datosEnvios.largo": null,
+        "comprador.documento": datos.DOCUMENTO,
+        caja: null,
+        "item.bulto": "1",
+        "item.peso": 0,
+        "item.alto": 0,
+        "item.largo": 0,
+        "item.profundidad": 0,
+        "item.descripcion": null,
+        "item.sku": datos.SKU,
       };
     });
 

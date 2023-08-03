@@ -26,20 +26,23 @@ router.post("/upload_macro", upload.single("file"), async (req, res) => {
         cliente_id: "161",
         servicio_id: "23",
         codigo_sucursal: "SP959",
-        "comprador.localidad": datos.LOCALIDAD,
+        "comprador.localidad": "CABA",
         "datosEnvios.valor_declarado": null,
         "datosEnvios.confirmada": "1",
         trabajo: null,
         lote: null, // Agregar logica para que enumere la cantidad de items de la tabla de excel
         remito: datos.REMITO,
         "sender.empresa": null,
-        "sender.remitente": "AC EASTWAY (BAPRO)",
+        "sender.remitente": "AC EASTWAY (MACRO)",
         "sender.calle": "GRAL MANSILLA",
         "sender.altura": "3603",
         "sender.localidad": "CIUDAD AUTONOMA DE BS AS",
         "sender.provincia": "BUENOS AIRES",
         "sender.cp": "1426",
-        "comprador.apellido_nombre": datos.APELLIDO + " " + datos.NOMBRE,
+        "comprador.apellido_nombre":
+          datos.APELLIDO + " " + datos.NOMBRE
+            ? datos.APELLIDO + " " + datos.NOMBRE
+            : datos.NOMBREYAPELLIDO,
         "comprador.calle": "Av. 27 de Febrero",
         "comprador.altura": "6350",
         "comprador.piso": null,

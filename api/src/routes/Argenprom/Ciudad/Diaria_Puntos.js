@@ -50,6 +50,7 @@ router.post("/upload_ciudad", upload.single("file"), async (req, res) => {
         "comprador.other_info": null,
         "comprador.email": datos.EMAIL,
         "comprador.obs2": datos.SKU,
+        "comprador.obs4": datos.FECHA,
         "datosEnvios.bultos": "1",
         "datosEnvios.peso": null,
         "datosEnvios.alto": null,
