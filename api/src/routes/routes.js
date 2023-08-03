@@ -22,6 +22,8 @@ import cambios_retirosAP_Ciudad from "./Argenprom/Ciudad/Cambios_Retiros.js";
 
 import envios_Bayer_Elo from "./Argenprom/BayerElo/Envios.js";
 
+import envios_Netquest_Arg from "./Argenprom/Netquest/Envios.js";
+
 const router = Router();
 
 // ACEASTWAY:
@@ -42,4 +44,8 @@ router.use("/", cambios_retirosAP_Ciudad);
 
 // AP BAYERN ELO
 router.use("/", envios_Bayer_Elo);
+
+// Netquest
+
+router.use("/", envios_Netquest_Arg);
 export default router;
