@@ -23,9 +23,9 @@ router.post("/upload_netquest_arg", upload.single("file"), async (req, res) => {
       return {
         tipo_operacion: "ENT",
         sector: "PAQUETERIA",
-        cliente_id: "39",
+        cliente_id: "43",
         servicio_id: "8",
-        codigo_sucursal: "SP865",
+        codigo_sucursal: "SP668",
         "comprador.localidad": datos.LOCALIDAD,
         "datosEnvios.valor_declarado": null,
         "datosEnvios.confirmada": "1",

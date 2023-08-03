@@ -25,7 +25,7 @@ router.post("/upload_massalin_arg", upload.single("file"), async (req, res) => {
         sector: "PAQUETERIA",
         cliente_id: "43",
         servicio_id: "8",
-        codigo_sucursal: "SP668",
+        codigo_sucursal: "SP865",
         "comprador.localidad": datos.LOCALIDAD,
         "datosEnvios.valor_declarado": null,
         "datosEnvios.confirmada": "1",
