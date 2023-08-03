@@ -19,11 +19,6 @@ router.post("/upload_netquest_arg", upload.single("file"), async (req, res) => {
     const jsonData = xlsx.utils.sheet_to_json(readBook.Sheets[sheetName]);
 
     const jsonToCsv = jsonData.map((datos) => {
-      const provincia = jsonData.map((datos) => datos.PROVINCIA);
-
-      provincia.toString();
-
-      console.log(provincia);
       // Envios OCASA, Macro
       return {
         tipo_operacion: "ENT",
@@ -51,7 +46,7 @@ router.post("/upload_netquest_arg", upload.single("file"), async (req, res) => {
         "comprador.altura": null,
         "comprador.piso": null,
         "comprador.dpto": null,
-        "comprador.provincia": provincia,
+        "comprador.provincia": datos.PROVINCIA,
         "comprador.cp": datos.CP,
         "comprador.celular": datos.TELEFONO,
         "comprador.email": datos.EMAIL,
