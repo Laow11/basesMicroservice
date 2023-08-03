@@ -22,7 +22,14 @@ import cambios_retirosAP_Ciudad from "./Argenprom/Ciudad/Cambios_Retiros.js";
 
 import envios_Bayer_Elo from "./Argenprom/BayerElo/Envios.js";
 
+// NETQUEST
 import envios_Netquest_Arg from "./Argenprom/Netquest/Envios.js";
+
+// MASSALIN
+import envios_Massalin_Arg from "./Argenprom/Massalin/Envios.js";
+
+// HIPOTECARIO
+import envios_Hipotecario_Arg from "./Argenprom/Hipotecario/Envios.js";
 
 const router = Router();
 
@@ -46,6 +53,12 @@ router.use("/", cambios_retirosAP_Ciudad);
 router.use("/", envios_Bayer_Elo);
 
 // Netquest
-
 router.use("/", envios_Netquest_Arg);
+
+// Massalin
+router.use("/", envios_Massalin_Arg);
+
+// Hipotecario
+router.use("/", envios_Hipotecario_Arg);
+
 export default router;
