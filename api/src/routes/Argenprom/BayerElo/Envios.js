@@ -20,6 +20,8 @@ router.post("/upload_bayern-elo", upload.single("file"), async (req, res) => {
 
     const jsonToCsv = jsonData.map((datos) => {
       const codigoPostal = datos.CP.toString().replace(/\D/g, "");
+      const telefono = datos.TELEFONO;
+      const telefonito = Number(telefono);
       return {
         tipo_operacion: "ENT",
         sector: "PAQUETERIA",
@@ -34,19 +36,20 @@ router.post("/upload_bayern-elo", upload.single("file"), async (req, res) => {
         remito: datos.REMITO,
         "sender.empresa": null,
         "sender.remitente": "ARGENPROM (ELO BAYER)",
-        "sender.calle": "MARTINEZ LEZICA",
+        "sender.calle": "MARTIN LEZICA",
         "sender.altura": "3046",
-        "sender.localidad": "CIUDAD AUTONOMA DE BS AS",
+        "sender.localidad": "MARTINEZ",
         "sender.provincia": "BUENOS AIRES",
-        "sender.cp": "1426",
-        "comprador.apellido_nombre": datos.FARMACIA + datos.NOMBREYAPELLIDO,
+        "sender.cp": "1640",
+        "comprador.apellido_nombre":
+          datos.FARMACIA + " - " + datos.NOMBREYAPELLIDO,
         "comprador.calle": datos.CALLE,
         "comprador.altura": null,
         "comprador.piso": null,
         "comprador.dpto": null,
         "comprador.provincia": datos.PROVINCIA,
         "comprador.cp": codigoPostal,
-        "comprador.celular": datos.TELEFONO,
+        "comprador.celular": telefonito,
         "comprador.email": datos.EMAIL,
         "comprador.other_info": "SOLO ENTREGAR SI ES UNA FARMACIA",
         "comprador.horario": null,
