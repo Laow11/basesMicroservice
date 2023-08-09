@@ -21,7 +21,7 @@ router.post("/upload_netquest_arg", upload.single("file"), async (req, res) => {
     const jsonToCsv = await Promise.all(
       jsonData.map(async (datos) => {
         // Envios OCASA, Macro
-        const codigoPostal = datos.CP.replace(/\D/g, "");
+        const codigoPostal = datos.CP.toString().replace(/\D/g, "");
 
         return {
           tipo_operacion: "ENT",
