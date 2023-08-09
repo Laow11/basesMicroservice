@@ -18,9 +18,9 @@ router.post("/upload_netquest_arg", upload.single("file"), async (req, res) => {
     // Conversion a formato json
     const jsonData = xlsx.utils.sheet_to_json(readBook.Sheets[sheetName]);
 
-    const jsonToCsv = jsonData.map(async (datos) => {
+    const jsonToCsv = jsonData.map((datos) => {
       // Envios OCASA, Macro
-      const codigoPostal = await datos.CP.replace(/\D/g, "");
+      const codigoPostal = datos.CP.replace(/\D/g, "");
 
       return {
         tipo_operacion: "ENT",
