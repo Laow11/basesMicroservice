@@ -2,7 +2,7 @@ import { Router } from "express";
 import multer from "multer";
 import xlsx from "xlsx";
 import fs from "fs";
-import csv from "fast-csv";
+import ExcelJS from "exceljs";
 import path from "path";
 
 const upload = multer({ dest: "uploads/" });
@@ -18,7 +18,7 @@ router.post("/upload_bayern-elo", upload.single("file"), async (req, res) => {
     // Conversion a formato json
     const jsonData = xlsx.utils.sheet_to_json(readBook.Sheets[sheetName]);
 
-    const jsonToCsv = jsonData.map((datos) => {
+    const jsonToXlsx = jsonData.map((datos) => {
       const codigoPostal = datos.CP.toString().replace(/\D/g, "");
       const telefono = datos.TELEFONO;
       const telefonito = Number(telefono);
@@ -71,27 +71,33 @@ router.post("/upload_bayern-elo", upload.single("file"), async (req, res) => {
       };
     });
 
-    console.log(jsonToCsv);
+    const workbook = new ExcelJS.Workbook();
+    const worksheet = workbook.addWorksheet("Sheet1");
 
-    const csvStream = csv.format({ headers: true });
-    const writableStream = fs.createWriteStream("ARGENPROM_BAYERELO.csv");
+    // Agregar encabezados
+    const headers = Object.keys(jsonToXlsx[0]);
+    worksheet.addRow(headers);
 
-    csvStream.pipe(writableStream);
-    jsonToCsv.forEach((data) => csvStream.write(data));
-    csvStream.end();
+    // Agregar filas de datos
+    jsonToXlsx.forEach((data) => {
+      const values = headers.map((header) => data[header]);
+      worksheet.addRow(values);
+    });
 
-    writableStream.on("finish", () => {
-      const file = path.resolve("ARGENPROM_BAYERELO.csv");
-      res.download(file, (err) => {
+    // Crear el archivo XLSX
+    const xlsxFilePath = path.resolve("ARGENPROM_BAYER_ELO.xlsx");
+    workbook.xlsx.writeFile(xlsxFilePath).then(() => {
+      // Descargar el archivo después de crearlo
+      res.download(xlsxFilePath, (err) => {
         if (err) {
           console.error("Error al descargar el archivo:", err);
         } else {
           // Eliminar el archivo después de que se haya descargado con éxito
-          fs.unlink(file, (err) => {
+          fs.unlink(xlsxFilePath, (err) => {
             if (err) {
               console.error("Error al eliminar el archivo:", err);
             } else {
-              console.log("Archivo eliminado:", file);
+              console.log("Archivo eliminado:", xlsxFilePath);
             }
           });
         }

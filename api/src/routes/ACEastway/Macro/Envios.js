@@ -2,7 +2,7 @@ import { Router } from "express";
 import multer from "multer";
 import xlsx from "xlsx";
 import fs from "fs";
-import csv from "fast-csv";
+import ExcelJS from "exceljs";
 import path from "path";
 
 const upload = multer({ dest: "uploads/" });

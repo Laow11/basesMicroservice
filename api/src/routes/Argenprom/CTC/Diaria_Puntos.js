@@ -2,7 +2,7 @@ import { Router } from "express";
 import multer from "multer";
 import xlsx from "xlsx";
 import fs from "fs";
-import csv from "fast-csv";
+import ExcelJS from "exceljs";
 import path from "path";
 
 const upload = multer({ dest: "uploads/" });
@@ -68,25 +68,33 @@ router.post("/upload_CTC_ARG", upload.single("file"), async (req, res) => {
       };
     });
 
-    const csvStream = csv.format({ headers: true });
-    const writableStream = fs.createWriteStream("ARGENPROM_CTC.csv");
+    const workbook = new ExcelJS.Workbook();
+    const worksheet = workbook.addWorksheet("Sheet1");
 
-    csvStream.pipe(writableStream);
-    jsonToCsv.forEach((data) => csvStream.write(data));
-    csvStream.end();
+    // Agregar encabezados
+    const headers = Object.keys(jsonToXlsx[0]);
+    worksheet.addRow(headers);
 
-    writableStream.on("finish", () => {
-      const file = path.resolve("ARGENPROM_CTC.csv");
-      res.download(file, (err) => {
+    // Agregar filas de datos
+    jsonToXlsx.forEach((data) => {
+      const values = headers.map((header) => data[header]);
+      worksheet.addRow(values);
+    });
+
+    // Crear el archivo XLSX
+    const xlsxFilePath = path.resolve("ARGENPROM_CTC.xlsx");
+    workbook.xlsx.writeFile(xlsxFilePath).then(() => {
+      // Descargar el archivo después de crearlo
+      res.download(xlsxFilePath, (err) => {
         if (err) {
           console.error("Error al descargar el archivo:", err);
         } else {
           // Eliminar el archivo después de que se haya descargado con éxito
-          fs.unlink(file, (err) => {
+          fs.unlink(xlsxFilePath, (err) => {
             if (err) {
               console.error("Error al eliminar el archivo:", err);
             } else {
-              console.log("Archivo eliminado:", file);
+              console.log("Archivo eliminado:", xlsxFilePath);
             }
           });
         }

@@ -37,9 +37,9 @@ router.post("/upload_netquest_arg", upload.single("file"), async (req, res) => {
           remito: datos.REMITO,
           "sender.empresa": null,
           "sender.remitente": "ARGENPROM (NETQUEST)",
-          "sender.calle": "MARTINEZ LEZICA",
+          "sender.calle": "MARTIN LEZICA",
           "sender.altura": "3046",
-          "sender.localidad": "CIUDAD AUTONOMA DE BS AS",
+          "sender.localidad": "MARTINEZ",
           "sender.provincia": "BUENOS AIRES",
           "sender.cp": "1640",
           "comprador.apellido_nombre": datos.NOMBREYAPELLIDO

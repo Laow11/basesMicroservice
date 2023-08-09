@@ -2,7 +2,7 @@ import { Router } from "express";
 import multer from "multer";
 import xlsx from "xlsx";
 import fs from "fs";
-import csv from "fast-csv";
+import ExcelJS from "exceljs";
 import path from "path";
 
 const upload = multer({ dest: "uploads/" });
@@ -18,7 +18,7 @@ router.post("/upload_massalin_arg", upload.single("file"), async (req, res) => {
     // Conversion a formato json
     const jsonData = xlsx.utils.sheet_to_json(readBook.Sheets[sheetName]);
 
-    const jsonToCsv = jsonData.map((datos) => {
+    const jsonToXlsx = jsonData.map((datos) => {
       // Envios OCASA, Macro
       const codigoPostal = datos.CP.toString().replace(/\D/g, "");
       return {
@@ -35,9 +35,9 @@ router.post("/upload_massalin_arg", upload.single("file"), async (req, res) => {
         remito: datos.REMITO,
         "sender.empresa": null,
         "sender.remitente": "ARGENPROM (MASSALIN)",
-        "sender.calle": "MARTINEZ LEZICA",
+        "sender.calle": "MARTIN LEZICA",
         "sender.altura": "3046",
-        "sender.localidad": "CIUDAD AUTONOMA DE BS AS",
+        "sender.localidad": "MARTINEZ",
         "sender.provincia": "BUENOS AIRES",
         "sender.cp": "1640",
         "comprador.apellido_nombre": datos.NOMBREYAPELLIDO
@@ -62,7 +62,7 @@ router.post("/upload_massalin_arg", upload.single("file"), async (req, res) => {
         "datosEnvios.ancho": null,
         "datosEnvios.largo": null,
         "datosEnvios.observaciones": null,
-        "comprador.documento": datos.DOCUMENTO,
+        "comprador.documento": datos.DNI,
         caja: null,
         "item.bulto": "1",
         "item.peso": 0,
@@ -74,27 +74,33 @@ router.post("/upload_massalin_arg", upload.single("file"), async (req, res) => {
       };
     });
 
-    console.log(jsonToCsv);
+    const workbook = new ExcelJS.Workbook();
+    const worksheet = workbook.addWorksheet("Sheet1");
 
-    const csvStream = csv.format({ headers: true });
-    const writableStream = fs.createWriteStream("ARGENPROM_MASSALIN.csv");
+    // Agregar encabezados
+    const headers = Object.keys(jsonToXlsx[0]);
+    worksheet.addRow(headers);
 
-    csvStream.pipe(writableStream);
-    jsonToCsv.forEach((data) => csvStream.write(data));
-    csvStream.end();
+    // Agregar filas de datos
+    jsonToXlsx.forEach((data) => {
+      const values = headers.map((header) => data[header]);
+      worksheet.addRow(values);
+    });
 
-    writableStream.on("finish", () => {
-      const file = path.resolve("ARGENPROM_MASSALIN.csv");
-      res.download(file, (err) => {
+    // Crear el archivo XLSX
+    const xlsxFilePath = path.resolve("ARGENPROM_MASSALIN.xlsx");
+    workbook.xlsx.writeFile(xlsxFilePath).then(() => {
+      // Descargar el archivo después de crearlo
+      res.download(xlsxFilePath, (err) => {
         if (err) {
           console.error("Error al descargar el archivo:", err);
         } else {
           // Eliminar el archivo después de que se haya descargado con éxito
-          fs.unlink(file, (err) => {
+          fs.unlink(xlsxFilePath, (err) => {
             if (err) {
               console.error("Error al eliminar el archivo:", err);
             } else {
-              console.log("Archivo eliminado:", file);
+              console.log("Archivo eliminado:", xlsxFilePath);
             }
           });
         }
