@@ -18,62 +18,65 @@ router.post("/upload_netquest_arg", upload.single("file"), async (req, res) => {
     // Conversion a formato json
     const jsonData = xlsx.utils.sheet_to_json(readBook.Sheets[sheetName]);
 
-    const jsonToCsv = jsonData.map((datos) => {
-      // Envios OCASA, Macro
-      const codigoPostal = datos.CP.replace(/\D/g, "");
+    const jsonToCsv = await Promise.all(
+      jsonData.map(async (datos) => {
+        // Envios OCASA, Macro
+        const codigoPostal = datos.CP.replace(/\D/g, "");
 
-      return {
-        tipo_operacion: "ENT",
-        sector: "PAQUETERIA",
-        cliente_id: "43",
-        servicio_id: "8",
-        codigo_sucursal: "SP668",
-        "comprador.localidad": datos.LOCALIDAD,
-        "datosEnvios.valor_declarado": null,
-        "datosEnvios.confirmada": "1",
-        trabajo: null,
-        lote: null,
-        remito: datos.REMITO,
-        "sender.empresa": null,
-        "sender.remitente": "ARGENPROM (NETQUEST)",
-        "sender.calle": "MARTINEZ LEZICA",
-        "sender.altura": "3046",
-        "sender.localidad": "CIUDAD AUTONOMA DE BS AS",
-        "sender.provincia": "BUENOS AIRES",
-        "sender.cp": "1640",
-        "comprador.apellido_nombre": datos.NOMBREYAPELLIDO
-          ? datos.NOMBREYAPELLIDO
-          : datos.APELLIDO + " " + datos.NOMBRE,
-        "comprador.calle": datos.CALLE,
-        "comprador.altura": null,
-        "comprador.piso": null,
-        "comprador.dpto": null,
-        "comprador.provincia": datos.PROVINCIA,
-        "comprador.cp": codigoPostal,
-        "comprador.celular": datos.TELEFONO,
-        "comprador.email": datos.EMAIL,
-        "comprador.other_info": datos.OBSERVACION,
-        "comprador.horario": null,
-        "comprador.obs1": null,
-        "comprador.obs2": datos.SKU,
-        "comprador.obs4": datos.FECHA,
-        "datosEnvios.bultos": "1",
-        "datosEnvios.peso": null,
-        "datosEnvios.alto": null,
-        "datosEnvios.ancho": null,
-        "datosEnvios.largo": null,
-        "datosEnvios.observaciones": null,
-        "comprador.documento": datos.DOCUMENTO,
-        caja: null,
-        "item.bulto": "1",
-        "item.peso": 0,
-        "item.alto": 0,
-        "item.largo": 0,
-        "item.profundidad": 0,
-        "ite.descripcion": null,
-        "item.sku": datos.SKU,
-      };
-    });
+        return {
+          tipo_operacion: "ENT",
+          sector: "PAQUETERIA",
+          cliente_id: "43",
+          servicio_id: "8",
+          codigo_sucursal: "SP668",
+          "comprador.localidad": datos.LOCALIDAD,
+          "datosEnvios.valor_declarado": null,
+          "datosEnvios.confirmada": "1",
+          trabajo: null,
+          lote: null,
+          remito: datos.REMITO,
+          "sender.empresa": null,
+          "sender.remitente": "ARGENPROM (NETQUEST)",
+          "sender.calle": "MARTINEZ LEZICA",
+          "sender.altura": "3046",
+          "sender.localidad": "CIUDAD AUTONOMA DE BS AS",
+          "sender.provincia": "BUENOS AIRES",
+          "sender.cp": "1640",
+          "comprador.apellido_nombre": datos.NOMBREYAPELLIDO
+            ? datos.NOMBREYAPELLIDO
+            : datos.APELLIDO + " " + datos.NOMBRE,
+          "comprador.calle": datos.CALLE,
+          "comprador.altura": null,
+          "comprador.piso": null,
+          "comprador.dpto": null,
+
+          "comprador.provincia": datos.PROVINCIA,
+          "comprador.cp": codigoPostal,
+          "comprador.celular": datos.TELEFONO,
+          "comprador.email": datos.EMAIL,
+          "comprador.other_info": datos.OBSERVACION,
+          "comprador.horario": null,
+          "comprador.obs1": null,
+          "comprador.obs2": datos.SKU,
+          "comprador.obs4": datos.FECHA,
+          "datosEnvios.bultos": "1",
+          "datosEnvios.peso": null,
+          "datosEnvios.alto": null,
+          "datosEnvios.ancho": null,
+          "datosEnvios.largo": null,
+          "datosEnvios.observaciones": null,
+          "comprador.documento": datos.DOCUMENTO,
+          caja: null,
+          "item.bulto": "1",
+          "item.peso": 0,
+          "item.alto": 0,
+          "item.largo": 0,
+          "item.profundidad": 0,
+          "ite.descripcion": null,
+          "item.sku": datos.SKU,
+        };
+      })
+    );
 
     const csvStream = csv.format({ headers: true });
     const writableStream = fs.createWriteStream("ARGENPROM_NETQUEST.csv");
