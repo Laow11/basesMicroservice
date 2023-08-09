@@ -23,6 +23,7 @@ router.post(
 
       const jsonToCsv = jsonData.map((datos) => {
         // Envios OCASA, Macro
+        const codigoPostal = datos.CP.replace(/\D/g, "");
         return {
           tipo_operacion: "ENT",
           sector: "PAQUETERIA",
@@ -50,7 +51,7 @@ router.post(
           "comprador.piso": null,
           "comprador.dpto": null,
           "comprador.provincia": datos.PROVINCIA,
-          "comprador.cp": datos.CP,
+          "comprador.cp": codigoPostal,
           "comprador.celular": datos.TELEFONO,
           "comprador.email": datos.EMAIL,
           "comprador.other_info": NULL,

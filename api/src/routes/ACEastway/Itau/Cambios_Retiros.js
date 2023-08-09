@@ -21,7 +21,7 @@ router.post("/upload_itau-cr", upload.single("file"), async (req, res) => {
     console.log(jsonData[0]);
 
     const jsonToCsv = jsonData.map((datos) => {
-      // ENT = ENTREGA, F = REENVÍO, R = RETIRO, C = CAMBIO.
+      const codigoPostal = datos.CP.replace(/\D/g, "");
       return {
         tipo_operacion: datos.GESTION.includes("REENVIO")
           ? "F"
@@ -44,11 +44,25 @@ router.post("/upload_itau-cr", upload.single("file"), async (req, res) => {
         "comprador.piso": datos.PISO,
         "comprador.dpto": datos.DPTO,
         "comprador.provincia": datos.PROVINCIA,
-        "comprador.cp": datos.CP,
+        "comprador.cp": codigoPostal,
         "comprador.other_info": datos.OBSERVACION,
         "comprador.email": datos.EMAIL,
         "comprador.obs2": datos.SKU,
-        "datosEnvios.bultos": datos.CANTIDAD,
+        "comprador.obs4": null,
+        "datosEnvios.bultos": "1",
+        "datosEnvios.peso": null,
+        "datosEnvios.alto": null,
+        "datosEnvios.ancho": null,
+        "datosEnvios.largo": null,
+        "comprador.documento": datos.DOCUMENTO,
+        caja: null,
+        "item.bulto": "1",
+        "item.peso": 0,
+        "item.alto": 0,
+        "item.largo": 0,
+        "item.profundidad": 0,
+        "item.descripcion": null,
+        "item.sku": datos.SKU,
       };
     });
     console.log(jsonToCsv);

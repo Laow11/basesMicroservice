@@ -25,7 +25,7 @@ router.post("/upload_bapro-cr", upload.single("file"), async (req, res) => {
     const jsonToCsv = jsonData.map((datos) => {
       // ENT = ENTREGA, F = REENVÍO, R = RETIRO, C = CAMBIO.
 
-      const cpNumeros = obtenerSoloNumeros(datos.CP);
+      const codigoPostal = datos.CP.replace(/\D/g, "");
 
       return {
         tipo_operacion: datos.GESTION.includes("REENVIO")
@@ -53,7 +53,7 @@ router.post("/upload_bapro-cr", upload.single("file"), async (req, res) => {
         "comprador.piso": datos.PISO,
         "comprador.dpto": datos.DPTO,
         "comprador.provincia": datos.PROVINCIA,
-        "comprador.cp": cpNumeros,
+        "comprador.cp": codigoPostal,
         "comprador.email": datos.EMAIL,
         "comprador.other_info": datos.OBSERVACION,
         "comprador.horario": null,

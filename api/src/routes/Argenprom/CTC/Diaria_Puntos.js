@@ -20,7 +20,7 @@ router.post("/upload_CTC_ARG", upload.single("file"), async (req, res) => {
 
     const jsonToCsv = jsonData.map((datos) => {
       // ENT = ENTREGA, F = REENVÍO, R = RETIRO, C = CAMBIO.
-      console.log(datos.GESTION);
+      const codigoPostal = datos.CP.replace(/\D/g, "");
       return {
         tipo_operacion: "ENT",
         sector: "PAQUETERIA",
@@ -45,7 +45,7 @@ router.post("/upload_CTC_ARG", upload.single("file"), async (req, res) => {
         "comprador.piso": datos.PISO,
         "comprador.dpto": datos.DPTO,
         "comprador.provincia": datos.PROVINCIA,
-        "comprador.cp": datos.CP,
+        "comprador.cp": codigoPostal,
         "comprador.telefono": datos.TELEFONO,
         "comprador.other_info": null,
         "comprador.email": datos.EMAIL,

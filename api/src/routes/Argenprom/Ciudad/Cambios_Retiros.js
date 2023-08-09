@@ -20,6 +20,7 @@ router.post("/upload_ciudad-cr", upload.single("file"), async (req, res) => {
 
     const jsonToCsv = jsonData.map((datos) => {
       // ENT = ENTREGA, F = REENVÍO, R = RETIRO, C = CAMBIO.
+      const codigoPostal = datos.CP.replace(/\D/g, "");
 
       return {
         tipo_operacion:
@@ -48,7 +49,7 @@ router.post("/upload_ciudad-cr", upload.single("file"), async (req, res) => {
         "comprador.piso": datos.PISO,
         "comprador.dpto": datos.DEPTO,
         "comprador.provincia": datos.PROVINCIA,
-        "comprador.cp": datos.CP,
+        "comprador.cp": codigoPostal,
         "comprador.telefono": datos.TELEFONO,
         "comprador.email": datos.EMAIL,
         "comprador.other_info": null,

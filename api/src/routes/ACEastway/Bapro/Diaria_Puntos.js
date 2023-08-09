@@ -23,7 +23,7 @@ router.post("/upload_bapro-canje", upload.single("file"), async (req, res) => {
     }
 
     const jsonToCsv = jsonData.map((datos) => {
-      const cpNumeros = obtenerSoloNumeros(datos.CP);
+      const codigoPostal = datos.CP.replace(/\D/g, "");
 
       return {
         tipo_operacion: "ENT",
@@ -49,7 +49,7 @@ router.post("/upload_bapro-canje", upload.single("file"), async (req, res) => {
         "comprador.piso": datos.PISO,
         "comprador.dpto": datos.DPTO,
         "comprador.provincia": datos.PROVINCIA,
-        "comprador.cp": cpNumeros,
+        "comprador.cp": codigoPostal,
         "comprador.celular": datos.TELEFONO,
         "comprador.email": datos.EMAIL,
         "comprador.other_info": datos.OBSERVACION,

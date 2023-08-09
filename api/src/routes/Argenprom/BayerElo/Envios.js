@@ -19,7 +19,7 @@ router.post("/upload_bayern-elo", upload.single("file"), async (req, res) => {
     const jsonData = xlsx.utils.sheet_to_json(readBook.Sheets[sheetName]);
 
     const jsonToCsv = jsonData.map((datos) => {
-      // Envios OCASA, Macro
+      const codigoPostal = datos.CP.replace(/\D/g, "");
       return {
         tipo_operacion: "ENT",
         sector: "PAQUETERIA",
@@ -45,7 +45,7 @@ router.post("/upload_bayern-elo", upload.single("file"), async (req, res) => {
         "comprador.piso": null,
         "comprador.dpto": null,
         "comprador.provincia": datos.PROVINCIA,
-        "comprador.cp": datos.CP,
+        "comprador.cp": codigoPostal,
         "comprador.celular": datos.TELEFONO,
         "comprador.email": datos.EMAIL,
         "comprador.other_info": "SOLO ENTREGAR SI ES UNA FARMACIA",
