@@ -19,7 +19,7 @@ router.post("/upload_bayern-elo", upload.single("file"), async (req, res) => {
     const jsonData = xlsx.utils.sheet_to_json(readBook.Sheets[sheetName]);
 
     const jsonToCsv = jsonData.map((datos) => {
-      const codigoPostal = datos.CP.replace(/\D/g, "");
+      const codigoPostal = datos.CP.toString().replace(/\D/g, "");
       return {
         tipo_operacion: "ENT",
         sector: "PAQUETERIA",

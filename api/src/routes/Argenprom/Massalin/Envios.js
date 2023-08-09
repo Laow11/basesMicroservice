@@ -20,7 +20,7 @@ router.post("/upload_massalin_arg", upload.single("file"), async (req, res) => {
 
     const jsonToCsv = jsonData.map((datos) => {
       // Envios OCASA, Macro
-      const codigoPostal = datos.CP.replace(/\D/g, "");
+      const codigoPostal = datos.CP.toString().replace(/\D/g, "");
       return {
         tipo_operacion: "ENT",
         sector: "PAQUETERIA",

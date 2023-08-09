@@ -20,7 +20,7 @@ router.post("/upload_ciudad", upload.single("file"), async (req, res) => {
 
     const jsonToCsv = jsonData.map((datos) => {
       // ENT = ENTREGA, F = REENVÍO, R = RETIRO, C = CAMBIO.
-      const codigoPostal = datos.CP.replace(/\D/g, "");
+      const codigoPostal = datos.CP.toString().replace(/\D/g, "");
 
       return {
         tipo_operacion: "ENT",
