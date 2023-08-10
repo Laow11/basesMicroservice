@@ -54,7 +54,7 @@ router.post(
           "comprador.cp": codigoPostal,
           "comprador.celular": datos.TELEFONO,
           "comprador.email": datos.EMAIL,
-          "comprador.other_info": NULL,
+          "comprador.other_info": null,
           "comprador.horario": null,
           "comprador.obs1": null,
           "comprador.obs2": datos.SKU,
