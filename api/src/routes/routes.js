@@ -31,6 +31,9 @@ import envios_Massalin_Arg from "./Argenprom/Massalin/Envios.js";
 // HIPOTECARIO
 import envios_Hipotecario_Arg from "./Argenprom/Hipotecario/Envios.js";
 
+import envios_DecoMoss from "./DecoMoss/Envios.js";
+
+import envios_Peppers from "./Peppers/Envios.js";
 const router = Router();
 
 // ACEASTWAY:
@@ -60,5 +63,11 @@ router.use("/", envios_Massalin_Arg);
 
 // Hipotecario
 router.use("/", envios_Hipotecario_Arg);
+
+// Peppers
+router.use("/", envios_Peppers);
+
+// DecoMoss
+router.use("/", envios_DecoMoss);
 
 export default router;
