@@ -51,7 +51,7 @@ router.post("/upload_massalin_arg", upload.single("file"), async (req, res) => {
         "comprador.cp": codigoPostal,
         "comprador.celular": datos.TELEFONO,
         "comprador.email": datos.EMAIL,
-        "comprador.other_info": NULL,
+        "comprador.other_info": null,
         "comprador.horario": null,
         "comprador.obs1": null,
         "comprador.obs2": datos.SKU,
