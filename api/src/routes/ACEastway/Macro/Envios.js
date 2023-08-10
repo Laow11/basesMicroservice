@@ -62,6 +62,7 @@ router.post("/upload_macro", upload.single("file"), async (req, res) => {
         "datosEnvios.alto": null,
         "datosEnvios.ancho": null,
         "datosEnvios.largo": null,
+        "datosEnvios.observaciones": null,
         caja: null,
         "item.bulto": "1",
         "item.peso": 0,

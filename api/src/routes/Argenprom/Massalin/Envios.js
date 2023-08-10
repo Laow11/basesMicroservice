@@ -18,6 +18,7 @@ router.post("/upload_massalin_arg", upload.single("file"), async (req, res) => {
     // Conversion a formato json
     const jsonData = xlsx.utils.sheet_to_json(readBook.Sheets[sheetName]);
 
+    let loteCount = 1;
     const jsonToXlsx = jsonData.map((datos) => {
       // Envios OCASA, Macro
       const codigoPostal = datos.CP.toString().replace(/\D/g, "");
@@ -31,7 +32,7 @@ router.post("/upload_massalin_arg", upload.single("file"), async (req, res) => {
         "datosEnvios.valor_declarado": null,
         "datosEnvios.confirmada": "1",
         trabajo: null,
-        lote: null,
+        lote: loteCount++,
         remito: datos.REMITO,
         "sender.empresa": null,
         "sender.remitente": "ARGENPROM (MASSALIN)",
