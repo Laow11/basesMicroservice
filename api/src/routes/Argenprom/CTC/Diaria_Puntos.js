@@ -18,7 +18,7 @@ router.post("/upload_CTC_ARG", upload.single("file"), async (req, res) => {
     // Conversion a formato json
     const jsonData = xlsx.utils.sheet_to_json(readBook.Sheets[sheetName]);
 
-    const jsonToCsv = jsonData.map((datos) => {
+    const jsonToXlsx = jsonData.map((datos) => {
       // ENT = ENTREGA, F = REENVÍO, R = RETIRO, C = CAMBIO.
       const codigoPostal = datos.CP.toString().replace(/\D/g, "");
       return {
