@@ -18,9 +18,10 @@ router.post("/upload_macro", upload.single("file"), async (req, res) => {
     // Conversion a formato json
     const jsonData = xlsx.utils.sheet_to_json(readBook.Sheets[sheetName]);
 
+    let loteCount = 1;
+
     const jsonToXlsx = jsonData.map((datos) => {
       // Envios OCASA, Macro
-      let loteCount = 1;
       return {
         tipo_operacion: "ENT",
         sector: "PAQUETERIA",
