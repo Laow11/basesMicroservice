@@ -61,7 +61,7 @@ router.post("/upload_bayern-elo", upload.single("file"), async (req, res) => {
         "datosEnvios.ancho": null,
         "datosEnvios.largo": null,
         "datosEnvios.observaciones": null,
-        "comprador.documumento": datos.DOCUMENTO,
+        "comprador.documento": datos.DOCUMENTO,
         caja: null,
         "item.bulto": "1",
         "item.peso": 0,
