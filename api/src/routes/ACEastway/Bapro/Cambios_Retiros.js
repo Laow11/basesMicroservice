@@ -18,11 +18,7 @@ router.post("/upload_bapro-cr", upload.single("file"), async (req, res) => {
     // Conversion a formato json
     const jsonData = xlsx.utils.sheet_to_json(readBook.Sheets[sheetName]);
 
-    function obtenerSoloNumeros(cadena) {
-      return cadena.replace(/\D/g, "");
-    }
-
-    const jsonToCsv = jsonData.map((datos) => {
+    const jsonToXlsx = jsonData.map((datos) => {
       // ENT = ENTREGA, F = REENVÍO, R = RETIRO, C = CAMBIO.
 
       const codigoPostal = datos.CP.replace(/\D/g, "");
@@ -76,25 +72,33 @@ router.post("/upload_bapro-cr", upload.single("file"), async (req, res) => {
       };
     });
 
-    const csvStream = csv.format({ headers: true });
-    const writableStream = fs.createWriteStream("ACEASTWAYBAPRO_CR.csv");
+    const workbook = new ExcelJS.Workbook();
+    const worksheet = workbook.addWorksheet("Sheet1");
 
-    csvStream.pipe(writableStream);
-    jsonToCsv.forEach((data) => csvStream.write(data));
-    csvStream.end();
+    // Agregar encabezados
+    const headers = Object.keys(jsonToXlsx[0]);
+    worksheet.addRow(headers);
 
-    writableStream.on("finish", () => {
-      const file = path.resolve("ACEASTWAYBAPRO_CR.csv");
-      res.download(file, (err) => {
+    // Agregar filas de datos
+    jsonToXlsx.forEach((data) => {
+      const values = headers.map((header) => data[header]);
+      worksheet.addRow(values);
+    });
+
+    // Crear el archivo XLSX
+    const xlsxFilePath = path.resolve("ACEASTWAY_BAPRO_CR.xlsx");
+    workbook.xlsx.writeFile(xlsxFilePath).then(() => {
+      // Descargar el archivo después de crearlo
+      res.download(xlsxFilePath, (err) => {
         if (err) {
           console.error("Error al descargar el archivo:", err);
         } else {
           // Eliminar el archivo después de que se haya descargado con éxito
-          fs.unlink(file, (err) => {
+          fs.unlink(xlsxFilePath, (err) => {
             if (err) {
               console.error("Error al eliminar el archivo:", err);
             } else {
-              console.log("Archivo eliminado:", file);
+              console.log("Archivo eliminado:", xlsxFilePath);
             }
           });
         }

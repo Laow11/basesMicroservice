@@ -18,9 +18,7 @@ router.post("/upload_itau-canje", upload.single("file"), async (req, res) => {
     // Conversion a formato json
     const jsonData = xlsx.utils.sheet_to_json(readBook.Sheets[sheetName]);
 
-    console.log(jsonData[0]);
-
-    const jsonToCsv = jsonData.map((datos) => {
+    const jsonToXlsx = jsonData.map((datos) => {
       return {
         tipo_operacion: "ENT",
         sector: "PAQUETERIA",
@@ -31,6 +29,7 @@ router.post("/upload_itau-canje", upload.single("file"), async (req, res) => {
         "datosEnvios.valor_declarado": null,
         "datosEnvios.confirmada": "1",
         trabajo: null,
+        lote: null,
         remito: datos.REMITO,
         "sender.empresa": null,
         "sender.remitente": "AC EASTWAY SA (ITAU)",
@@ -67,17 +66,38 @@ router.post("/upload_itau-canje", upload.single("file"), async (req, res) => {
         "item.sku": datos.SKU,
       };
     });
-    console.log(jsonToCsv);
+    const workbook = new ExcelJS.Workbook();
+    const worksheet = workbook.addWorksheet("Sheet1");
 
-    const csvStream = csv.format({ headers: true });
-    const writableStream = fs.createWriteStream("ITAU_CANJE.csv");
+    // Agregar encabezados
+    const headers = Object.keys(jsonToXlsx[0]);
+    worksheet.addRow(headers);
 
-    csvStream.pipe(writableStream);
-    jsonToCsv.forEach((data) => csvStream.write(data));
-    csvStream.end();
+    // Agregar filas de datos
+    jsonToXlsx.forEach((data) => {
+      const values = headers.map((header) => data[header]);
+      worksheet.addRow(values);
+    });
 
-    const file = path.resolve("ITAU_CANJE.csv");
-    res.download(file);
+    // Crear el archivo XLSX
+    const xlsxFilePath = path.resolve("ACEASTWAY_ITAU.xlsx");
+    workbook.xlsx.writeFile(xlsxFilePath).then(() => {
+      // Descargar el archivo después de crearlo
+      res.download(xlsxFilePath, (err) => {
+        if (err) {
+          console.error("Error al descargar el archivo:", err);
+        } else {
+          // Eliminar el archivo después de que se haya descargado con éxito
+          fs.unlink(xlsxFilePath, (err) => {
+            if (err) {
+              console.error("Error al eliminar el archivo:", err);
+            } else {
+              console.log("Archivo eliminado:", xlsxFilePath);
+            }
+          });
+        }
+      });
+    });
   } catch (error) {
     res.status(500).send({ error: error.message });
     console.log(error);

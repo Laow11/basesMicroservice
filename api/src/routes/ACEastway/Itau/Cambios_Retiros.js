@@ -20,7 +20,7 @@ router.post("/upload_itau-cr", upload.single("file"), async (req, res) => {
 
     console.log(jsonData[0]);
 
-    const jsonToCsv = jsonData.map((datos) => {
+    const jsonToXlsx = jsonData.map((datos) => {
       const codigoPostal = datos.CP.replace(/\D/g, "");
       return {
         tipo_operacion: datos.GESTION.includes("REENVIO")
@@ -65,27 +65,33 @@ router.post("/upload_itau-cr", upload.single("file"), async (req, res) => {
         "item.sku": datos.SKU,
       };
     });
-    console.log(jsonToCsv);
+    const workbook = new ExcelJS.Workbook();
+    const worksheet = workbook.addWorksheet("Sheet1");
 
-    const csvStream = csv.format({ headers: true });
-    const writableStream = fs.createWriteStream("ITAU_CR.csv");
+    // Agregar encabezados
+    const headers = Object.keys(jsonToXlsx[0]);
+    worksheet.addRow(headers);
 
-    csvStream.pipe(writableStream);
-    jsonToCsv.forEach((data) => csvStream.write(data));
-    csvStream.end();
+    // Agregar filas de datos
+    jsonToXlsx.forEach((data) => {
+      const values = headers.map((header) => data[header]);
+      worksheet.addRow(values);
+    });
 
-    writableStream.on("finish", () => {
-      const file = path.resolve("ITAU_CR.csv");
-      res.download(file, (err) => {
+    // Crear el archivo XLSX
+    const xlsxFilePath = path.resolve("ACEASTWAY_ITAU_CR.xlsx");
+    workbook.xlsx.writeFile(xlsxFilePath).then(() => {
+      // Descargar el archivo después de crearlo
+      res.download(xlsxFilePath, (err) => {
         if (err) {
           console.error("Error al descargar el archivo:", err);
         } else {
           // Eliminar el archivo después de que se haya descargado con éxito
-          fs.unlink(file, (err) => {
+          fs.unlink(xlsxFilePath, (err) => {
             if (err) {
               console.error("Error al eliminar el archivo:", err);
             } else {
-              console.log("Archivo eliminado:", file);
+              console.log("Archivo eliminado:", xlsxFilePath);
             }
           });
         }

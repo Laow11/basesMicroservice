@@ -72,7 +72,7 @@ router.post(
           "item.alto": 0,
           "item.largo": 0,
           "item.profundidad": 0,
-          "ite.descripcion": null,
+          "item.descripcion": null,
           "item.sku": datos.SKU,
         };
       });
