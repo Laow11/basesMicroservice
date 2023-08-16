@@ -36,6 +36,7 @@ router.post("/upload_itau-cr", upload.single("file"), async (req, res) => {
         "sender.remitente": "AC EASTWAY SA (ITAU)",
         "sender.calle": "GRAL MANSILLA",
         "sender.altura": "3603",
+        "sender.localidad": "CABA",
         "sender.provincia": "BUENOS AIRES",
         "sender.cp": "1426",
         "comprador.apellido_nombre": datos.NOMBREYAPELLIDO,
