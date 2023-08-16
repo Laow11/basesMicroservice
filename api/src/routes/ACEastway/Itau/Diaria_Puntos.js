@@ -19,6 +19,7 @@ router.post("/upload_itau-canje", upload.single("file"), async (req, res) => {
     const jsonData = xlsx.utils.sheet_to_json(readBook.Sheets[sheetName]);
 
     const jsonToXlsx = jsonData.map((datos) => {
+      const codigoPostal = datos.CP.replace(/\D/g, "");
       return {
         tipo_operacion: "ENT",
         sector: "PAQUETERIA",
@@ -43,7 +44,7 @@ router.post("/upload_itau-canje", upload.single("file"), async (req, res) => {
         "comprador.piso": datos.PISO,
         "comprador.dpto": datos.DPTO,
         "comprador.provincia": datos.PROVINCIA,
-        "comprador.cp": datos.CP,
+        "comprador.cp": codigoPostal,
         "comprador.celular": datos.TELEFONO,
         "comprador.email": datos.EMAIL,
         "comprador.other_info": datos.OBSERVACION,
