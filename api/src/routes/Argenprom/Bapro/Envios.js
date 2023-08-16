@@ -27,9 +27,9 @@ router.post(
         return {
           tipo_operacion: "ENT",
           sector: "PAQUETERIA",
-          cliente_id: "41", // CAMBIAR
-          servicio_id: "8", // CAMBIAR
-          codigo_sucursal: "SP665", // CAMBIAR
+          cliente_id: "41", 
+          servicio_id: "8",
+          codigo_sucursal: "SP665", 
           "comprador.localidad": datos.LOCALIDAD,
           "datosEnvios.valor_declarado": null,
           "datosEnvios.confirmada": "1",
