@@ -37,7 +37,7 @@ router.post("/upload_galicia-cr", upload.single("file"), async (req, res) => {
         trabajo: null,
         remito: datos.REMITO,
         "sender.empresa": null,
-        "sender.remitente": "ARGENPROM (CIUDAD)",
+        "sender.remitente": "ARGENPROM (GALICIA)",
         "sender.calle": "MARTIN LEZICA",
         "sender.altura": "3046",
         "sender.localidad": "MARTINEZ",
