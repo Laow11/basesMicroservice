@@ -8,7 +8,7 @@ import path from "path";
 const upload = multer({ dest: "uploads/" });
 const router = Router();
 
-router.post("/upload_CTC_ARG", upload.single("file"), async (req, res) => {
+router.post("/upload_trimage", upload.single("file"), async (req, res) => {
   try {
     // Conversor de Excel a Json
     const readBook = xlsx.readFile(req.file.path);
@@ -21,52 +21,55 @@ router.post("/upload_CTC_ARG", upload.single("file"), async (req, res) => {
     let loteCount = 1;
 
     const jsonToXlsx = jsonData.map((datos) => {
-      // ENT = ENTREGA, F = REENVÍO, R = RETIRO, C = CAMBIO.
-      const codigoPostal = datos.CP.toString().replace(/\D/g, "");
+      // Envios OCASA, Macro
       return {
         tipo_operacion: "ENT",
         sector: "PAQUETERIA",
-        cliente_id: "42",
-        servicio_id: "8",
-        codigo_sucursal: "SP658",
-        "comprador.localidad": datos.LOCALIDAD,
+        cliente_id: "252",
+        servicio_id: "23",
+        codigo_sucursal: "SP1047",
+        "comprador.localidad": "CABA",
         "datosEnvios.valor_declarado": null,
         "datosEnvios.confirmada": "1",
         trabajo: null,
         lote: loteCount++,
         remito: datos.REMITO,
         "sender.empresa": null,
-        "sender.remitente": "ARGENPROM (CTC)",
-        "sender.calle": "MARTIN LEZICA",
-        "sender.altura": "3046",
-        "sender.localidad": "MARTINEZ",
-        "sender.provincia": "BUENOS AIRES",
-        "sender.cp": "1640",
-        "comprador.apellido_nombre": datos.NOMBREYAPELLIDO,
-        "comprador.calle": datos.CALLE,
-        "comprador.altura": datos.ALTURA,
-        "comprador.piso": datos.PISO,
-        "comprador.dpto": datos.DPTO,
-        "comprador.provincia": datos.PROVINCIA,
-        "comprador.cp": codigoPostal,
-        "comprador.telefono": datos.TELEFONO,
+        "sender.remitente": "TRIMAGE",
+        "sender.calle": "ARCE 315 7 C",
+        "sender.altura": null,
+        "sender.localidad": "CIUDAD AUTONOMA DE BS AS",
+        "sender.provincia": "CIUDAD AUTONOMA DE BS AS",
+        "sender.cp": "1426",
+        "comprador.apellido_nombre":
+          datos.APELLIDO + " " + datos.NOMBRE
+            ? datos.APELLIDO + " " + datos.NOMBRE
+            : datos.NOMBREYAPELLIDO,
+        "comprador.calle": "Av. 27 de Febrero",
+        "comprador.altura": "6350",
+        "comprador.piso": null,
+        "comprador.dpto": null,
+        "comprador.provincia": "CABA",
+        "comprador.cp": "1437",
+        "comprador.celular": null,
+        "comprador.email": null,
         "comprador.other_info": null,
-        "comprador.email": datos.EMAIL,
+        "comprador.horario": null,
+        "comprador.obs1": null,
         "comprador.obs2": datos.SKU,
-        "comprador.obs4": null,
-        "datosEnvios.bultos": "1",
-        "datosEnvios.peso": null,
+        "datosEnvios.bultos": 1,
+        "datosEnvios.peso": 1,
         "datosEnvios.alto": null,
         "datosEnvios.ancho": null,
         "datosEnvios.largo": null,
-        "comprador.documento": datos.DOCUMENTO,
+        "datosEnvios.observaciones": null,
         caja: null,
-        "item.bulto": "1",
-        "item.peso": 0,
+        "item.bulto": 1,
+        "item.peso": 1,
         "item.alto": 0,
         "item.largo": 0,
         "item.profundidad": 0,
-        "item.descripcion": null,
+        "item.descripcion": datos.DESCRIPCION,
         "item.sku": datos.SKU,
       };
     });
@@ -85,7 +88,7 @@ router.post("/upload_CTC_ARG", upload.single("file"), async (req, res) => {
     });
 
     // Crear el archivo XLSX
-    const xlsxFilePath = path.resolve("ARGENPROM_CTC.xlsx");
+    const xlsxFilePath = path.resolve("ARGENPROM_TRIMAGE.xlsx");
     workbook.xlsx.writeFile(xlsxFilePath).then(() => {
       // Descargar el archivo después de crearlo
       res.download(xlsxFilePath, (err) => {
@@ -105,7 +108,7 @@ router.post("/upload_CTC_ARG", upload.single("file"), async (req, res) => {
     });
   } catch (error) {
     res.status(500).send({ error: error.message });
-    console.log(error.message);
+    console.log(error);
   }
 });
 

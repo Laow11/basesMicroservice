@@ -42,6 +42,9 @@ import envios_DecoMoss from "./DecoMoss/Envios.js";
 // PEPPERS
 import envios_Peppers from "./Peppers/Envios.js";
 
+// TRIMAGE
+import envios_Trimage from "./Trimage/Envios.js";
+
 const router = Router();
 
 // AC Itau
@@ -83,5 +86,10 @@ router.use("/", envios_Peppers);
 
 // DecoMoss
 router.use("/", envios_DecoMoss);
+
+// Trimage
+router.use("/", envios_Trimage);
+
+// -------------------------Etiquetas de OCA---------------------------------------//
 
 export default router;
