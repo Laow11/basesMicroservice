@@ -36,6 +36,12 @@ import envios_Hipotecario_Arg from "./Argenprom/Hipotecario/Envios.js";
 // AP CTC
 import envios_CTC_Arg from "./Argenprom/CTC/Envios.js";
 
+// AP GALICIA
+import cambio_retiros_Galicia from "./Argenprom/Galicia/Cambios_Retiros.js";
+import envios_Galicia from "./Argenprom/Galicia/Envios.js";
+
+//----------------------------------------------------------
+
 // DECOMOSS
 import envios_DecoMoss from "./DecoMoss/Envios.js";
 
@@ -80,6 +86,10 @@ router.use("/", envios_Bapro_Arg);
 
 // AP CTC
 router.use("/", envios_CTC_Arg);
+
+// AP Galicia CR
+router.use("/", cambio_retiros_Galicia);
+router.use("/", envios_Galicia);
 
 // Peppers
 router.use("/", envios_Peppers);
