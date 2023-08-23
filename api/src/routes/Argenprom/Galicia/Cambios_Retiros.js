@@ -64,7 +64,7 @@ router.post("/upload_galicia-cr", upload.single("file"), async (req, res) => {
         "datosEnvios.ancho": null,
         "datosEnvios.largo": null,
         "datosEnvios.observaciones": null,
-        "comprador.documento": datos.DOCUMENTO,
+        "comprador.documento": datos.DNI,
         caja: null,
         "item.bulto": "1",
         "item.peso": 0,

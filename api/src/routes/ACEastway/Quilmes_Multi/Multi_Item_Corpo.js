@@ -9,7 +9,7 @@ const upload = multer({ dest: "uploads/" });
 const router = Router();
 
 router.post(
-  "/upload_hipotecario_arg",
+  "/upload_quilmes_multi",
   upload.single("file"),
   async (req, res) => {
     try {
@@ -22,57 +22,56 @@ router.post(
       const jsonData = xlsx.utils.sheet_to_json(readBook.Sheets[sheetName]);
 
       const jsonToXlsx = jsonData.map((datos) => {
-        // Envios OCASA, Macro
-        const codigoPostal = datos.CP.toString().replace(/\D/g, "");
+        // Agregar logica que sume tanto el precio como el peso de los productos si son multi item o los duplique si el bulto es mayor a 1 (Si el bulto es mayor a 1, quiere decir que tiene mas de 1 producto iguales).
         return {
+          referencia_retiro: datos.ID, // Similar al lote, enumera los clientes.
           tipo_operacion: "ENT",
           sector: "PAQUETERIA",
-          cliente_id: "34",
+          cliente_id: "256",
           servicio_id: "8",
-          codigo_sucursal: "SP679",
+          codigo_sucursal: "SP1051",
           "comprador.localidad": datos.LOCALIDAD,
           "datosEnvios.valor_declarado": null,
           "datosEnvios.confirmada": "1",
           trabajo: null,
-          lote: null,
           remito: datos.REMITO,
           "sender.empresa": null,
-          "sender.remitente": "ARGENPROM (HIPOTECARIO)",
-          "sender.calle": "MARTIN LEZICA",
-          "sender.altura": "3046",
-          "sender.localidad": "MARTINEZ",
+          "sender.remitente": "AC EASTWAY MARKETPLACE CORP",
+          "sender.calle": "GRAL MANSILLA",
+          "sender.altura": "3603",
+          "sender.localidad": "CIUDAD AUTONOMA DE BS AS",
           "sender.provincia": "BUENOS AIRES",
-          "sender.cp": "1640",
-          "comprador.apellido_nombre": datos.NOMBREYAPELLIDO
-            ? datos.NOMBREYAPELLIDO
-            : datos.APELLIDO + " " + datos.NOMBRE,
+          "sender.cp": "1426",
+          "comprador.apellido_nombre":
+            datos.APELLIDO + " " + datos.NOMBRE
+              ? datos.APELLIDO + " " + datos.NOMBRE
+              : datos.NOMBREYAPELLIDO,
           "comprador.calle": datos.CALLE,
           "comprador.altura": null,
           "comprador.piso": null,
           "comprador.dpto": null,
           "comprador.provincia": datos.PROVINCIA,
-          "comprador.cp": codigoPostal,
+          "comprador.cp": datos.CP,
           "comprador.celular": datos.TELEFONO,
           "comprador.email": datos.EMAIL,
           "comprador.other_info": null,
-          "comprador.horario": null,
           "comprador.obs1": null,
           "comprador.obs2": datos.SKU,
-          "comprador.obs4": datos.FECHA,
-          "datosEnvios.bultos": "1",
-          "datosEnvios.peso": null,
-          "datosEnvios.alto": null,
-          "datosEnvios.ancho": null,
-          "datosEnvios.largo": null,
+          "comprador.obs4": null,
+          "datosEnvios.bultos": datos.BULTO,
+          "datosEnvios.peso": null, // Aca va el peso final, despues de sumar todos los productos
           "datosEnvios.observaciones": null,
+          "comprador.fecha_servicio": null,
+          "comprador.hora_desde": null,
+          "comprador.hora_hasta": null,
           "comprador.documento": datos.DNI,
           caja: null,
-          "item.bulto": "1",
-          "item.peso": 0,
+          "item.bulto": datos.BULTO,
+          "item.peso": datos.AFORO, // Peso individualmente de cada producto
           "item.alto": 0,
           "item.largo": 0,
           "item.profundidad": 0,
-          "item.descripcion": null,
+          "item.descripcion": datos.DESCRIPCION,
           "item.sku": datos.SKU,
         };
       });
@@ -91,7 +90,7 @@ router.post(
       });
 
       // Crear el archivo XLSX
-      const xlsxFilePath = path.resolve("ARGENPROM_HIPOTECARIO.xlsx");
+      const xlsxFilePath = path.resolve("ACEastway_QUILMES_MULTI_ITEM.xlsx");
       workbook.xlsx.writeFile(xlsxFilePath).then(() => {
         // Descargar el archivo después de crearlo
         res.download(xlsxFilePath, (err) => {
