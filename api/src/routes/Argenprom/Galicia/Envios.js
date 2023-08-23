@@ -87,7 +87,7 @@ router.post("/upload_galicia", upload.single("file"), async (req, res) => {
       worksheet.addRow(values);
     });
 
-    const xlsxFilePath = path.join(__dirname, "ARGENPROM_GALICIA.xlsx");
+    const xlsxFilePath = path.resolve("ARGENPROM_GALICIA.xlsx");
     workbook.xlsx.writeFile(xlsxFilePath).then(() => {
       // Descargar el archivo después de crearlo
       res.download(xlsxFilePath, (err) => {
