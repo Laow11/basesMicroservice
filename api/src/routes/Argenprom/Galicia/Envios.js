@@ -48,7 +48,7 @@ router.post("/upload_galicia", upload.single("file"), async (req, res) => {
         "comprador.dpto": datos.DPTO,
         "comprador.provincia": datos.PROVINCIA,
         "comprador.cp": codigoPostal,
-        "comprador.telefono": datos.TELEFONO,
+        "comprador.celular": datos.TELEFONO,
         "comprador.email": datos.EMAIL,
         "comprador.other_info": null,
         "comprador.obs1":
