@@ -56,7 +56,7 @@ router.post("/upload_galicia", upload.single("file"), async (req, res) => {
         "comprador.obs2": datos.SKU,
         "comprador.obs3": datos.PUNTOS,
         "comprador.obs4": datos.FECHA,
-        "datosEnvios.bultos": "1",
+        "datosEnvios.bultos": datos.BULTOS,
         "datosEnvios.peso": null,
         "datosEnvios.alto": null,
         "datosEnvios.ancho": null,
