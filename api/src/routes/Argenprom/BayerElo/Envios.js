@@ -71,6 +71,7 @@ router.post("/upload_bayern-elo", upload.single("file"), async (req, res) => {
         "item.alto": 0,
         "item.largo": 0,
         "item.profundidad": 0,
+        "item.descripcion": null,
         "item.sku": datos.SKU,
       };
     });

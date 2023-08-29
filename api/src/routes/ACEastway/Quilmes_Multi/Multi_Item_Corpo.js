@@ -24,7 +24,7 @@ router.post(
       const jsonToXlsx = jsonData.map((datos) => {
         // Agregar logica que sume tanto el precio como el peso de los productos si son multi item o los duplique si el bulto es mayor a 1 (Si el bulto es mayor a 1, quiere decir que tiene mas de 1 producto iguales).
         return {
-          referencia_retiro: datos.ID, // Similar al lote, enumera los clientes.
+          referencia_retiro: datos.ORDEN, // Similar al lote, enumera los clientes.
           tipo_operacion: "ENT",
           sector: "PAQUETERIA",
           cliente_id: "256",
