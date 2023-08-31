@@ -27,9 +27,9 @@ router.post(
         return {
           tipo_operacion: "ENT",
           sector: "PAQUETERIA",
-          cliente_id: "41", 
+          cliente_id: "41",
           servicio_id: "8",
-          codigo_sucursal: "SP665", 
+          codigo_sucursal: "SP665",
           "comprador.localidad": datos.LOCALIDAD,
           "datosEnvios.valor_declarado": null,
           "datosEnvios.confirmada": "1",
@@ -47,7 +47,7 @@ router.post(
             ? datos.NOMBREYAPELLIDO
             : datos.APELLIDO + datos.NOMBRE,
           "comprador.calle": datos.CALLE,
-          "comprador.altura": null,
+          "comprador.altura": datos.ALTURA,
           "comprador.piso": null,
           "comprador.dpto": null,
           "comprador.provincia": datos.PROVINCIA,

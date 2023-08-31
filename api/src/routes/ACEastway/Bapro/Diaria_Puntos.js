@@ -58,6 +58,7 @@ router.post("/upload_bapro-canje", upload.single("file"), async (req, res) => {
         "datosEnvios.alto": null,
         "datosEnvios.ancho": null,
         "datosEnvios.largo": null,
+        "datosEnvios.observaciones": null,
         "comprador.documento": datos.DOCUMENTO,
         caja: null,
         "item.bulto": "1",
